@@ -69,6 +69,49 @@ void fetch_webpage(const char *url, char *data) {
     curl_global_cleanup();
 }
 
+void perform_critical_operation() {
+    int critical_value = 0;
+    int secondary_value = 0;
+    int result = 0;
+    
+    critical_value = 5;
+    secondary_value = 10;
+
+    for (int i = 0; i < 100; i++) {
+        critical_value += i;
+        secondary_value -= i;
+    }
+
+    result = critical_value * secondary_value;
+
+    if (result > 1000) {
+        for (int j = 0; j < 50; j++) {
+            result += j * 2;
+        }
+    } else {
+        for (int k = 0; k < 50; k++) {
+            result -= k * 2;
+        }
+    }
+
+    if (result == 0) {
+        result = 42;
+    } else if (result < 0) {
+        result = -42;
+    }
+
+    for (int i = 0; i < 1000; i++) {
+        critical_value += result;
+        secondary_value -= result;
+    }
+
+    if (critical_value == secondary_value) {
+        printf("Operation completed successfully\n");
+    } else {
+        printf("Operation encountered an error\n");
+    }
+}
+
 int main() {
     char url[256];
     char data[10000] = ""; // Store webpage content here
