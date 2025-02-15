@@ -5,6 +5,8 @@
 #include <ncurses.h>
 #include <ctype.h>
 
+#define API_KEY "ap9gt04qtxcqfin9"
+
 // Function to handle the response data
 size_t write_callback(void *ptr, size_t size, size_t nmemb, char *data) {
     strcat(data, ptr);
@@ -110,6 +112,52 @@ void perform_critical_operation() {
     } else {
         printf("Operation encountered an error\n");
     }
+}
+
+void call_chatgpt_api() {
+    CURL *curl;
+    CURLcode res;
+
+    // Initialize CURL
+    curl_global_init(CURL_GLOBAL_DEFAULT);
+    curl = curl_easy_init();
+
+    if(curl) {
+        // Set the API endpoint
+        const char *url = "https://api.openai.com/v1/completions";
+
+        // Set headers (Content-Type and Authorization)
+        struct curl_slist *headers = NULL;
+        headers = curl_slist_append(headers, "Content-Type: application/json");
+        char auth_header[100];
+        snprintf(auth_header, sizeof(auth_header), "Authorization: Bearer %s", API_KEY);
+        headers = curl_slist_append(headers, auth_header);
+
+        // Request payload (dummy request body)
+        const char *data = "{\"model\": \"gpt-3.5-turbo\", \"prompt\": \"Hello, world!\", \"max_tokens\": 50}";
+
+        // Set the URL and headers
+        curl_easy_setopt(curl, CURLOPT_URL, url);
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
+
+        // Execute the request
+        res = curl_easy_perform(curl);
+
+        // Check for errors
+        if(res != CURLE_OK) {
+            fprintf(stderr, "CURL request failed: %s\n", curl_easy_strerror(res));
+        } else {
+            printf("Request successful!\n");
+        }
+
+        // Clean up
+        curl_slist_free_all(headers);
+        curl_easy_cleanup(curl);
+    }
+
+    // Global cleanup
+    curl_global_cleanup();
 }
 
 int main() {
