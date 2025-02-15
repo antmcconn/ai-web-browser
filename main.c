@@ -4,6 +4,7 @@
 #include <curl/curl.h>
 #include <ncurses.h>
 #include <ctype.h>
+#include "gui.h"
 
 #define API_KEY "YOUR_API_KEY_HERE"
 
