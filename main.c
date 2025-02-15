@@ -5,7 +5,7 @@
 #include <ncurses.h>
 #include <ctype.h>
 
-#define API_KEY "ap9gt04qtxcqfin9"
+#define API_KEY "YOUR_API_KEY_HERE"
 
 // Function to handle the response data
 size_t write_callback(void *ptr, size_t size, size_t nmemb, char *data) {
